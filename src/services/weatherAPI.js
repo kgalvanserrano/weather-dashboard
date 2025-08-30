@@ -16,3 +16,21 @@ async function getData(lat, lon, time) {
     console.error(error.message);
   }
 }
+
+async function getWeatherbyCity(city) {
+    // input validation
+    if (!city) {
+        throw new Error("Missing city parameter");
+    }
+    // call geocoding func to get coordinates (lat/lon)
+    const geoData = await getData(city, 1); // 1 is the limit parameter, tells the api to return only 1 result
+    if (!geoData || geoData.length === 0) {
+        throw new Error("Geocoding failed");
+    }
+    const { lat, lon } = geoData[0]; // destructure lat/lon from geoData, geoData[0] is an object
+
+    // pass coords to existing weather fetch
+    const coordinates = { lat, lon };
+    // return combined result
+    return coordinates;
+}  
