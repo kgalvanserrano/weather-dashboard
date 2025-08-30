@@ -31,6 +31,9 @@ async function getWeatherbyCity(city) {
 
     // pass coords to existing weather fetch
     const coordinates = { lat, lon };
+
+    // call weather API using lat/lon -> get weather data
+    const weatherData = await getData(lat, lon, Math.floor(Date.now() / 1000));
     // return combined result
-    return coordinates;
-}  
+    return { ...coordinates, weather: weatherData };
+} 
