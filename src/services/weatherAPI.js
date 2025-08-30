@@ -37,3 +37,4 @@ async function getWeatherbyCity(city) {
     // return combined result
     return { ...coordinates, weather: weatherData };
 } 
+
