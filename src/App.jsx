@@ -10,7 +10,7 @@ function App() {
   })
 
   return (
-    <Weather
+    <WeatherCard
       temperature={weather.temperature}
       city={city}
       weatherIcon={weather.weatherIcon}
