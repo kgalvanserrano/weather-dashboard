@@ -14,6 +14,7 @@ function App() {
   useEffect(() => {
     getWeatherbyCity(city).then((data) => {
       console.log("Weather API returned: ", data);
+      setWeather(data);
     });
   }, []); // empty dependency array to run only once on mount  
 
