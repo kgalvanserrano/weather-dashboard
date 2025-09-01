@@ -2,7 +2,7 @@ async function getData(lat, lon, time) {
     if (lat === null || lon === null || time === null) { // input validation, making sure args are actually usable b4 making API call
       throw new Error("Missing parameters");
     }
-  const url = `https://api.openweathermap.org/data/3.0/onecall/timemachine?lat=${lat}&lon=${lon}&dt=${time}&appid=${import.meta.env.WEATHER_API_KEY}`;
+  const url = `https://api.openweathermap.org/data/2.5/onecall/timemachine?lat=${lat}&lon=${lon}&dt=${time}&appid=${import.meta.env.VITE_WEATHER_API_KEY}`;
   try {
     const response = await fetch(url);
     if (!response.ok) {
