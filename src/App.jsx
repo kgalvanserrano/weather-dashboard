@@ -6,9 +6,9 @@ import './App.css'
 
 function App() {
   const [city, setCity] = useState('San Jose') // city state
-  const [weather, setWeather] = useState({
-    temperature: '72°F',
-    weatherIcon: '☀️'
+  const [weather, setWeather] = useState({ // weather state, with placeholder values, could change to null
+    temperature: null,
+    weatherIcon: null
   })
 
   useEffect(() => {
@@ -16,7 +16,7 @@ function App() {
       console.log("Weather API returned: ", data);
       setWeather(data);
     });
-  }, []); // empty dependency array to run only once on mount  
+  }, [city]); // city dependency array to run when city name is changed
 
   return (
     <WeatherCard
