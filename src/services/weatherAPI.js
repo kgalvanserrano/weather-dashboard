@@ -38,3 +38,4 @@ async function getWeatherbyCity(city) {
     return { ...coordinates, weather: weatherData };
 } 
 
+export { getData, getWeatherbyCity };
