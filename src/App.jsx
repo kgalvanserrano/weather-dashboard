@@ -3,11 +3,18 @@ import Weather from './components/WeatherCard'
 import './App.css'
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [city, setCity] = useState('San Jose')
+  const [weather, setWeather] = useState({
+    temperature: '72°F',
+    weatherIcon: '☀️'
+  })
 
   return (
-  <Weather temperature="72°F" city="San Jose" weatherIcon="☀️" />
-
+    <Weather
+      temperature={weather.temperature}
+      city={city}
+      weatherIcon={weather.weatherIcon}
+    />
   )
 }
 
