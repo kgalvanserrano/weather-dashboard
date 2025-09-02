@@ -20,10 +20,10 @@ async function getWeatherData(lat, lon, time) {
     let url;
     if (time == null) {
       // fetch current/forecast data
-      url = `https://api.openweathermap.org/data/3.0/onecall?lat=${lat}&lon=${lon}&appid=${API_KEY}`;
+      url = `https://api.openweathermap.org/data/3.0/onecall?lat=${lat}&lon=${lon}&units=imperial&appid=${API_KEY}`;
     } else {
       // fetch historical data for a specific unix timestamp (seconds)
-      url = `https://api.openweathermap.org/data/3.0/onecall/timemachine?lat=${lat}&lon=${lon}&dt=${time}&appid=${API_KEY}`;
+      url = `https://api.openweathermap.org/data/3.0/onecall/timemachine?lat=${lat}&lon=${lon}&dt=${time}&units=imperial&appid=${API_KEY}`;
     }
   try {
     const response = await fetch(url);
@@ -53,7 +53,7 @@ async function getWeatherbyCity(city) {
     const { lat, lon } = geoData[0]; // destructure lat/lon from geoData, geoData[0] is an object
 
     // call weather API using lat/lon -> get weather data
-    const weatherData = await getWeatherData(lat, lon, Math.floor(Date.now() / 1000));
+    const weatherData = await getWeatherData(lat, lon);
     // return combined result
     return { lat, lon, weather: weatherData };
 } 
