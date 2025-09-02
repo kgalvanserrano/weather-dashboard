@@ -19,15 +19,15 @@ function App() {
       const raw = resp.weather;
 
       // pick the most likely entry: data[0] (timemachine) or current or hourly[0]
-      const entry = raw?.data?.[0] ?? raw?.current ?? raw?.hourly?.[0] ?? null;
+      const entry = raw?.data?.[0] ?? raw?.current ?? raw?.hourly?.[0] ?? null; // if raw.data exists, grab the first item, otherwise return undefined → “nullish coalescing operator” → means “if the thing on the left is null or undefined, use the thing on the right.”
 
-  const temp = entry?.temp; // temperature (units=imperial -> Fahrenheit)
-      const iconCode = entry?.weather?.[0]?.icon;
+  const temp = entry?.temp; // temperature (units=imperial -> Fahrenheit) - safe lookup. If entry doesn’t exist, temp will be undefined instead of crashing your app.
+      const iconCode = entry?.weather?.[0]?.icon; // digs into the weather array only if it exists.
 
       console.log('extracted entry/temp/icon ->', entry, temp, iconCode);
 
-  const temperature = temp != null ? `${Math.round(temp)} °F` : 'N/A';
-      const weatherIcon = iconCode ? `https://openweathermap.org/img/wn/${iconCode}@2x.png` : null;
+  const temperature = temp != null ? `${Math.round(temp)} °F` : 'N/A'; // if temp exists, round it and add F, if it doesnt fall back to N/A
+      const weatherIcon = iconCode ? `https://openweathermap.org/img/wn/${iconCode}@2x.png` : null; // if iconCode exists, build the URL string. If not, weatherIcon is null.
 
       setWeather({
         temperature,
