@@ -1,10 +1,30 @@
 import geocodeAPI from "./geocodeAPI";
 
+const API_KEY = import.meta.env.VITE_WEATHER_API_KEY;
+if (!API_KEY) {
+  // Fail fast with a clear message so the dev sees why requests are unauthorized
+  console.error('Missing VITE_WEATHER_API_KEY in import.meta.env — add it to .env and restart the dev server');
+  throw new Error('Missing VITE_WEATHER_API_KEY');
+}
+
 async function getWeatherData(lat, lon, time) {
-    if (lat === null || lon === null || time === null) { // input validation, making sure args are actually usable b4 making API call
-      throw new Error("Missing parameters");
+    // accept undefined/null checks in a single place
+      // validate lat/lon; time is optional (if provided we'll call the timemachine endpoint)
+      if (lat == null || lon == null) {
+        throw new Error("Missing parameters: lat and lon are required");
+      }
+
+    // One Call 3.0 endpoints:
+    // - current/forecast: /data/3.0/onecall?lat=...&lon=...&appid=API_KEY
+    // - historical: /data/3.0/onecall/timemachine?lat=...&lon=...&dt=UNIX_SECONDS&appid=API_KEY
+    let url;
+    if (time == null) {
+      // fetch current/forecast data
+      url = `https://api.openweathermap.org/data/3.0/onecall?lat=${lat}&lon=${lon}&appid=${API_KEY}`;
+    } else {
+      // fetch historical data for a specific unix timestamp (seconds)
+      url = `https://api.openweathermap.org/data/3.0/onecall/timemachine?lat=${lat}&lon=${lon}&dt=${time}&appid=${API_KEY}`;
     }
-  const url = `https://api.openweathermap.org/data/2.5/onecall?lat=${lat}&lon=${lon}&dt=${time}&appid=${import.meta.env.VITE_WEATHER_API_KEY}`;
   try {
     const response = await fetch(url);
     if (!response.ok) {
@@ -12,10 +32,11 @@ async function getWeatherData(lat, lon, time) {
     }
 
     const result = await response.json();
-    console.log(result);
+    console.log('getWeatherData result:', result);
     return result;
   } catch (error) {
-    console.error(error.message);
+    console.error('getWeatherData error:', error.message || error);
+    throw error; // rethrow so callers can handle failures explicitly
   }
 }
 
@@ -31,13 +52,10 @@ async function getWeatherbyCity(city) {
     }
     const { lat, lon } = geoData[0]; // destructure lat/lon from geoData, geoData[0] is an object
 
-    // pass coords to existing weather fetch
-    const coordinates = { lat, lon };
-
     // call weather API using lat/lon -> get weather data
     const weatherData = await getWeatherData(lat, lon, Math.floor(Date.now() / 1000));
     // return combined result
-    return { ...coordinates, weather: weatherData };
+    return { lat, lon, weather: weatherData };
 } 
 
 export { getWeatherData, getWeatherbyCity };

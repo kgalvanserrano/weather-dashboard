@@ -1,8 +1,14 @@
+const API_KEY = import.meta.env.VITE_WEATHER_API_KEY;
+if (!API_KEY) {
+  console.error('Missing VITE_WEATHER_API_KEY in import.meta.env — add it to .env and restart the dev server');
+  throw new Error('Missing VITE_WEATHER_API_KEY');
+}
+
 async function getGeoData(q, limit) {
-    if (!q || !limit) { // input validation, making sure args are actually usable b4 making API call
+    if (!q || limit == null) { // input validation, making sure args are actually usable b4 making API call
       throw new Error("Missing parameters");
     }
-  const url = `https://api.openweathermap.org/geo/1.0/direct?q=${q}&limit=${limit}&appid=${import.meta.env.VITE_WEATHER_API_KEY}`;
+  const url = `https://api.openweathermap.org/geo/1.0/direct?q=${encodeURIComponent(q)}&limit=${limit}&appid=${API_KEY}`;
   try {
     const response = await fetch(url);
     if (!response.ok) {
@@ -10,10 +16,11 @@ async function getGeoData(q, limit) {
     }
 
     const result = await response.json();
-    console.log(result);
+    console.log('getGeoData result:', result);
     return result;
   } catch (error) {
-    console.error(error.message);
+    console.error('getGeoData error:', error.message || error);
+    throw error; // rethrow so callers can handle failures explicitly
   }
 }
 
