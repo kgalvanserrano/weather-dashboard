@@ -1,5 +1,3 @@
-import { useState } from "react";
-
 // destructured props
 function WeatherCard({ temperature, city, weatherIcon }) {
   return (

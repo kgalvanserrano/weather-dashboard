@@ -2,10 +2,12 @@ import { useState, useEffect } from 'react'
 import { getWeatherbyCity } from './services/weatherAPI';
 import WeatherCard from './components/WeatherCard'
 import './App.css'
+import ForecastList from './components/ForecastList';
 
 
 function App() {
   const [city, setCity] = useState('San Jose') // city state
+  const [forecast, setForecast] = useState([]); // forecast state
   const [weather, setWeather] = useState({ // weather state, with placeholder null values
     temperature: null,
     weatherIcon: null
@@ -13,22 +15,32 @@ function App() {
 
   useEffect(() => {
     getWeatherbyCity(city).then((resp) => {
+      // current weather stuff
       console.log("Weather API returned: ", resp);
-
       // resp.weather is the full API response from getWeatherData
       const raw = resp.weather;
-
       // pick the most likely entry: data[0] (timemachine) or current or hourly[0]
       const entry = raw?.data?.[0] ?? raw?.current ?? raw?.hourly?.[0] ?? null; // if raw.data exists, grab the first item, otherwise return undefined → “nullish coalescing operator” → means “if the thing on the left is null or undefined, use the thing on the right.”
-
-  const temp = entry?.temp; // temperature (units=imperial -> Fahrenheit) - safe lookup. If entry doesn’t exist, temp will be undefined instead of crashing your app.
+      const temp = entry?.temp; // temperature (units=imperial -> Fahrenheit) - safe lookup. If entry doesn’t exist, temp will be undefined instead of crashing your app.
       const iconCode = entry?.weather?.[0]?.icon; // digs into the weather array only if it exists.
-
       console.log('extracted entry/temp/icon ->', entry, temp, iconCode);
-
-  const temperature = temp != null ? `${Math.round(temp)} °F` : 'N/A'; // if temp exists, round it and add F, if it doesnt fall back to N/A
+      const temperature = temp != null ? `${Math.round(temp)} °F` : 'N/A'; // if temp exists, round it and add F, if it doesnt fall back to N/A
       const weatherIcon = iconCode ? `https://openweathermap.org/img/wn/${iconCode}@2x.png` : null; // if iconCode exists, build the URL string. If not, weatherIcon is null.
 
+      // forecast stuff
+      const dailyData = resp.weather?.daily ?? []; // safe lookup, if resp.weather or resp.weather.daily is null/undefined, dailyData will be an empty array
+      const nextFiveDays = dailyData.slice(0, 5);
+      const forecastArray = nextFiveDays.map(day => {
+        const rounded = Math.round(day.temp?.day ?? NaN);
+        return {
+          dateLabel: new Date(day.dt * 1000).toLocaleDateString('en-US', { weekday: 'short' }),
+          temp: Number.isFinite(rounded) ? `${rounded} °F` : 'N/A',
+          iconUrl: day.weather?.[0]?.icon ? `https://openweathermap.org/img/wn/${day.weather[0].icon}@2x.png` : null,
+          description: day.weather?.[0]?.description || 'No description'
+        };
+      });
+
+      setForecast(forecastArray);
       setWeather({
         temperature,
         weatherIcon
@@ -40,11 +52,13 @@ function App() {
   }, [city]); // city dependency array to run when city name is changed
 
   return (
-    <WeatherCard
+    <><WeatherCard
       temperature={weather.temperature}
       city={city}
-      weatherIcon={weather.weatherIcon}
-    />
+      weatherIcon={weather.weatherIcon} />
+      <ForecastList
+        forecastData={forecast} />
+    </>
   )
 }
 
