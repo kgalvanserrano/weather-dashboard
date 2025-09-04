@@ -29,18 +29,18 @@ function App() {
 
       // forecast stuff
       const dailyData = resp.weather?.daily ?? []; // safe lookup, if resp.weather or resp.weather.daily is null/undefined, dailyData will be an empty array
-      const nextFiveDays = dailyData.slice(0, 5);
+      const nextFiveDays = dailyData.slice(0, 5);// get first 5 items from daily array
       const forecastArray = nextFiveDays.map(day => {
-        const rounded = Math.round(day.temp?.day ?? NaN);
+        const rounded = Math.round(day.temp?.day ?? NaN); // safe lookup for day.temp.day, if day.temp is null/undefined, rounded will be NaN
         return {
           dateLabel: new Date(day.dt * 1000).toLocaleDateString('en-US', { weekday: 'short' }),
-          temp: Number.isFinite(rounded) ? `${rounded} °F` : 'N/A',
-          iconUrl: day.weather?.[0]?.icon ? `https://openweathermap.org/img/wn/${day.weather[0].icon}@2x.png` : null,
-          description: day.weather?.[0]?.description || 'No description'
+          temp: Number.isFinite(rounded) ? `${rounded} °F` : 'N/A', // handle NaN case - if day.temp.day is undefined, rounded will be NaN, and we want to avoid displaying "NaN °F"
+          iconUrl: day.weather?.[0]?.icon ? `https://openweathermap.org/img/wn/${day.weather[0].icon}@2x.png` : null, // if icon code exists, build the URL string. If not, iconUrl is null.
+          description: day.weather?.[0]?.description || 'No description' // fallback description - if day.weather or day.weather[0] or day.weather[0].description is null/undefined, use 'No description' as fallback
         };
       });
 
-      setForecast(forecastArray);
+      setForecast(forecastArray); 
       setWeather({
         temperature,
         weatherIcon
@@ -52,10 +52,11 @@ function App() {
   }, [city]); // city dependency array to run when city name is changed
 
   return (
-    <><WeatherCard
-      temperature={weather.temperature}
-      city={city}
-      weatherIcon={weather.weatherIcon} />
+    <>
+      <WeatherCard
+        temperature={weather.temperature}
+        city={city}
+        weatherIcon={weather.weatherIcon} />
       <ForecastList
         forecastData={forecast} />
     </>
