@@ -53,6 +53,18 @@ function App() {
 
   return (
     <>
+    <input
+        type="text"
+        value={city}
+        onChange={(e) => setCity(e.target.value)}
+        placeholder="Enter city name" />
+    <button onClick={() =>
+      getWeatherbyCity(city).then((resp) => {
+        setWeather(resp.weather, weatherIcon);
+      })
+    }>
+      Search
+    </button>
       <WeatherCard
         temperature={weather.temperature}
         city={city}
