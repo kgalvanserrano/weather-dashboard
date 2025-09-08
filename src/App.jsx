@@ -12,15 +12,18 @@ function App() {
     temperature: null,
     weatherIcon: null,
   });
-  const [debounceTimeout, setdebounceTimeout] = useState(null); // state to hold the debounce timeout ID
+  const [debounceTimeout, setDebounceTimeout] = useState(null); // state to hold the debounce timeout ID
   const [debounceCity, setDebounceCity] = useState(city); // state to hold the debounced city value
+  const [loading, setLoading] = useState(false); // loading state
+  const [error, setError] = useState(null); // error state
+
   useEffect(() => {
     // seperate useEffect to debounce city input changes
     if (debounceTimeout) clearTimeout(debounceTimeout); // clear existing timeout if user is still typing
     const timeoutId = setTimeout(() => {
       setDebounceCity(city);
     }, 500); // 500ms debounce time
-    setdebounceTimeout(timeoutId);
+    setDebounceTimeout(timeoutId);
     return () => clearTimeout(timeoutId); // cleanup on unmount or before next effect run
   }, [city]);
 
