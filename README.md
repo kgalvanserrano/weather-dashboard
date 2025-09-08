@@ -13,7 +13,6 @@ WIP
 ---
 
 ## Screenshot
-Add a screenshot or short GIF in this section to make the README pop (e.g. a `screenshot.png` or `demo.gif` in the repo).
 
 ![App screenshot](screenshot/demo.png)
 
