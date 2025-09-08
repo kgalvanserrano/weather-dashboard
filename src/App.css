@@ -40,3 +40,69 @@
 .read-the-docs {
   color: #888;
 }
+
+.app-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 16px;
+}
+
+.forecast-container {
+  display: flex;
+  justify-content: center;
+  padding: 16px;
+}
+
+/* container that holds the forecast cards in a single row with wrapping */
+.forecast-list {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  max-width: 960px;
+  margin: 0 auto;
+}
+
+/* individual forecast card styling (used by ForecastCard) */
+.forecast-card {
+  flex: 0 1 120px; /* don't grow too large, allow wrapping */
+  background: #2b2b2b;
+  color: #fff;
+  padding: 12px;
+  border-radius: 8px;
+  text-align: center;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+}
+
+/* ensure forecast icons are a consistent, reasonable size */
+.forecast-card img {
+  width: 72px;
+  height: 72px;
+  object-fit: contain;
+  display: block;
+  margin: 0 auto 8px;
+}
+
+/* weather card (current conditions) icon sizing */
+.weather-card img {
+  width: 96px;
+  height: 96px;
+  object-fit: contain;
+  display: block;
+  margin: 8px auto;
+}
+
+input {
+  padding: 8px;
+  font-size: 16px;
+  margin-bottom: 8px;
+  width: 80%;
+  max-width: 300px;
+}
+
+button {
+  padding: 8px 16px;
+  font-size: 16px;
+}

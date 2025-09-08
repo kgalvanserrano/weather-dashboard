@@ -92,12 +92,16 @@ function App() {
         placeholder="Enter city name"
       />
       <button onClick={() => setDebounceCity(city)}>Search</button>
-      <WeatherCard
-        temperature={weather.temperature}
-        city={city}
-        weatherIcon={weather.weatherIcon}
-      />
-      <ForecastList forecastData={forecast} />
+      <div className="app-container">
+        <WeatherCard
+          temperature={weather.temperature}
+          city={city}
+          weatherIcon={weather.weatherIcon}
+        />
+      </div>
+      <div className="forecast-container">
+        <ForecastList forecastData={forecast} />
+      </div>
     </>
   );
 }

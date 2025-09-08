@@ -5,14 +5,14 @@
 // destructured props
 function ForecastCard({ dateLabel, temp, iconUrl, description }) {
   return (
-    <div className="weather-card">
+    <div className="forecast-card">
       {iconUrl ? (
         <img src={iconUrl} alt={`Weather icon for ${description} on ${dateLabel}`} />
       ) : (
         <div className="icon-placeholder">No icon</div>
       )}
-      <h2>{dateLabel}</h2>
-      <p>{temp}</p>
+      <h3 style={{ margin: "6px 0 4px" }}>{dateLabel}</h3>
+      <p style={{ margin: 0, fontSize: "0.9rem" }}>{temp}</p>
     </div>
   );
 }
