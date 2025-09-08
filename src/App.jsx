@@ -28,7 +28,10 @@ function App() {
   }, [city]);
 
   useEffect(() => {
-    getWeatherbyCity(city)
+    if (!debounceCity) return; // if city is empty, do nothing
+    setLoading(true); // start loading
+    setError(null); // clear previous errors
+    getWeatherbyCity(debounceCity)
       .then((resp) => {
         // current weather stuff
         console.log("Weather API returned: ", resp);
@@ -70,12 +73,18 @@ function App() {
       })
       .catch((err) => {
         console.error("Failed to get weather:", err);
+        setError("Failed to fetch weather data. Please try again.");
         setWeather({ temperature: "N/A", weatherIcon: null });
+      })
+      .finally(() => {
+        setLoading(false); // end loading
       });
   }, [debounceCity]); // city dependency array to run when city name is changed
 
   return (
     <>
+      {loading && <p>Loading...</p>}
+      {error && <p style={{ color: "red" }}>{error}</p>}
       <input
         type="text"
         value={city}
