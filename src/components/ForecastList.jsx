@@ -12,13 +12,14 @@ function ForecastList({ forecastData }) {
   return (
     <div className="forecast-list">
       {forecastData.map((day, index) => (
-        <ForecastCard
-          key={index}
-          dateLabel={day.dateLabel}
-          temp={day.temp}
-          iconUrl={day.iconUrl}
-          description={day.description}
-        />
+        <div key={index} style={{ animationDelay: `${index * 70}ms` }}>
+          <ForecastCard
+            dateLabel={day.dateLabel}
+            temp={day.temp}
+            iconUrl={day.iconUrl}
+            description={day.description}
+          />
+        </div>
       ))}
     </div>
   );

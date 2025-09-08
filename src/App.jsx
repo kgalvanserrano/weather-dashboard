@@ -85,13 +85,16 @@ function App() {
     <>
       {loading && <p>Loading...</p>}
       {error && <p style={{ color: "red" }}>{error}</p>}
-      <input
-        type="text"
-        value={city}
-        onChange={(e) => setCity(e.target.value)}
-        placeholder="Enter city name"
-      />
-      <button onClick={() => setDebounceCity(city)}>Search</button>
+      <div className="search-row">
+        <input
+          aria-label="city-input"
+          type="text"
+          value={city}
+          onChange={(e) => setCity(e.target.value)}
+          placeholder="Enter city name"
+        />
+        <button onClick={() => setDebounceCity(city)}>Search</button>
+      </div>
       <div className="app-container">
         <WeatherCard
           temperature={weather.temperature}
